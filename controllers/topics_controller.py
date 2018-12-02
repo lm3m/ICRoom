@@ -12,17 +12,17 @@ prefix = api.namespace('topics', description='Controller for Topics')
 
 @prefix.route('/')
 class TopicsController(Resource):
-    @requires_authorization
     @prefix.doc('Create a new topic')
     @prefix.expect(topics_model, validate=True)
+    @requires_authorization
     def post(self):
         """
         creates a new topic
         """
         return TopicsModel.create_topic(api.payload['title'], api.payload['description']), 200
 
-    @requires_authorization
     @prefix.doc('View all topics')
+    @requires_authorization
     def get(self):
         """
         get the list of topics
