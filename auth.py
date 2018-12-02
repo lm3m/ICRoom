@@ -14,7 +14,7 @@ def requires_authorization(f):
     decorator for token validation for routes
     """
     @wraps(f)
-    def decorated_function(*args, **kws):
+    def decorated_function(request, *args, **kws):
         token = Authorization.get_auth_token(request.headers)
         user = Authorization.validate_decode_token(token)
         return f(user, *args, **kws)
