@@ -3,7 +3,7 @@ import logging
 from flask import request, make_response, jsonify
 from flask_restplus import Resource, fields
 from rest_plus import api
-from models.users_model import users_model, create_user, login, logout
+from models.users_model import UsersModel, users_model
 from werkzeug.exceptions import HTTPException, BadRequest
 from auth import Authorization
 
@@ -19,7 +19,7 @@ class UsersController(Resource):
         """
         creates a new user
         """
-        return create_user(api.payload['username'], api.payload['password']), 200
+        return UsersModel.create_user(api.payload['username'], api.payload['password']), 200
     
 @prefix.route('/<username>')
 @prefix.param('username', 'user to act upon')
@@ -34,13 +34,13 @@ class UserController(Resource):
             raise BadRequest("No action query parameter")
         
         if action == "login":
-            auth_token = login(username, api.payload['password'])
+            auth_token = UsersModel.login(username, api.payload['password'])
             response_object = { 'auth_token': auth_token }
             return response_object, 200
         elif action == "logout":
             token = Authorization.get_auth_token(request.headers)
             user = Authorization.validate_decode_token(token)
-            return logout(user, token), 200
+            return UsersModel.logout(user, token), 200
         else:
             raise BadRequest("\'{}\' is not a valid action.".format(action))
 
