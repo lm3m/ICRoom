@@ -30,16 +30,15 @@ class TopicsModel(object):
         topic_label = TopicsModel.build_topic_name(title)
         print(topic_label, file=sys.stderr)
 
-        topic_title = redis.hget(topic_id, "title")
+        topic_title = redis.hget(topic_label, "title")
         if topic_title is not None:
             raise BadRequest("Topic already exists")
 
-        topic_id = redis.incr("topic_count")
-        redis.lset("topic-list", topic_id, topic_label)
+        topic_id = redis.rpush("topic-list", topic_label)
 
         topic_dict = {
             'title': title,
-            'decription': description
+            'description': description
         }
 
         redis.hmset(topic_label, topic_dict)
@@ -55,10 +54,15 @@ class TopicsModel(object):
         topic_list = []
         topic_array = redis.lrange("topic-list", 0, -1)
         for index, topic_label in enumerate(topic_array):
-            topic = redis.hget(topic_label)
-            topic['id'] = index
+            topic = {}
+            topic_details = redis.hgetall(topic_label)
+            print(topic_details, file=sys.stderr)
+            topic["id"] = index
+            topic["title"] = topic_details['title']
+            topic["description"] = topic_details['description']
             topic_list.append(topic)
 
+        print(topic_list, file=sys.stderr)
         return topic_list
 
 

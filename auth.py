@@ -3,6 +3,7 @@ import jwt
 import datetime
 import sys
 
+from flask import request
 from functools import wraps
 from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
@@ -14,7 +15,7 @@ def requires_authorization(f):
     decorator for token validation for routes
     """
     @wraps(f)
-    def decorated_function(request, *args, **kws):
+    def decorated_function(*args, **kws):
         token = Authorization.get_auth_token(request.headers)
         user = Authorization.validate_decode_token(token)
         return f(user, *args, **kws)

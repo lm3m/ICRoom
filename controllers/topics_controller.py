@@ -15,7 +15,7 @@ class TopicsController(Resource):
     @prefix.doc('Create a new topic')
     @prefix.expect(topics_model, validate=True)
     @requires_authorization
-    def post(self):
+    def post(self, user):
         """
         creates a new topic
         """
@@ -23,7 +23,7 @@ class TopicsController(Resource):
 
     @prefix.doc('View all topics')
     @requires_authorization
-    def get(self):
+    def get(self, user):
         """
         get the list of topics
         :return list of all topics:
