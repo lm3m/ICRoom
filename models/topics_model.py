@@ -5,7 +5,6 @@ from flask_restplus import fields
 from rest_plus import api
 from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
-from auth import Authorization
 
 log = logging.getLogger(__name__)
 

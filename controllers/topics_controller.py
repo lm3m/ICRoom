@@ -2,7 +2,7 @@ import logging
 
 from flask_restplus import Resource, fields
 from rest_plus import api
-from models.topics_model import TopicsModel
+from models.topics_model import TopicsModel, topics_model
 from auth import requires_authorization
 
 log = logging.getLogger(__name__)
@@ -13,7 +13,7 @@ prefix = api.namespace('topics', description='Controller for Topics')
 class TopicsController(Resource):
     @requires_authorization
     @prefix.doc('Create a new topic')
-    @prefix.expect(topic_model, validate=True)
+    @prefix.expect(topics_model, validate=True)
     def post(self):
         """
         creates a new topic
