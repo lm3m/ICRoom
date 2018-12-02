@@ -17,14 +17,14 @@ users_model = api.model('User', {
 
 class UsersModel(object):
 
-    @classmethod
+    @staticmethod
     def build_user_id(username):
         """
         generate internal user id from username
         """
         return "user-{}".format(username)
 
-    @classmethod
+    @staticmethod
     def create_user(username, password):
         """
         create a new user, making sure it username is unique
@@ -46,7 +46,7 @@ class UsersModel(object):
         print(redis.hgetall(user_id), file=sys.stderr)
         return user_id
 
-    @classmethod
+    @staticmethod
     def login(username, password):
         """
         logs the given user in and returns a jwt token
@@ -58,7 +58,7 @@ class UsersModel(object):
     
         return Authorization.encode_jwt_token(user_id)
 
-    @classmethod
+    @staticmethod
     def logout(user, token):
         """
         logs the given user out and blocks the jwt token
