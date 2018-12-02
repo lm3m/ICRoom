@@ -29,7 +29,10 @@ class UsersModel(object):
         """
         create a new user, making sure it username is unique
         """
-        user = redis.hget("user-{}".format(username), "user")
+        user_id = UsersModel.build_user_id(username)
+        print(user_id, file=sys.stderr)
+
+        user = redis.hget(user_id, "user")
         if user is not None:
             raise BadRequest("User already exists")
         
@@ -40,8 +43,6 @@ class UsersModel(object):
             'password_hash' : str(hashed)
         }
 
-        user_id = UsersModel.build_user_id(username)
-        print(user_id, file=sys.stderr)
         redis.hmset(user_id, user_dict)
         print(redis.hgetall(user_id), file=sys.stderr)
         return user_id
