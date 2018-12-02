@@ -1,5 +1,6 @@
 import logging
 
+from flask import request, make_response, jsonify
 from flask_restplus import Resource, fields
 from rest_plus import api
 from models.topics_model import TopicsModel, topics_model
@@ -20,6 +21,8 @@ class TopicsController(Resource):
         """
         return TopicsModel.create_topic(api.payload['title'], api.payload['description']), 200
 
+    @requires_authorization
+    @prefix.doc('View all topics')
     def get(self):
         """
         get the list of topics
