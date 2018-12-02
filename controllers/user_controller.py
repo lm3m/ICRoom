@@ -1,13 +1,11 @@
-import sys
 import logging
-import json 
 
 from flask import request, make_response, jsonify
 from flask_restplus import Resource, fields
 from rest_plus import api
 from models.users_model import users_model, create_user, login, logout
 from werkzeug.exceptions import HTTPException, BadRequest
-from auth import get_auth_token, validate_decode_token
+from auth import Authorization
 
 log = logging.getLogger(__name__)
 
@@ -40,8 +38,8 @@ class UserController(Resource):
             response_object = { 'auth_token': auth_token }
             return response_object, 200
         elif action == "logout":
-            token = get_auth_token(request.headers)
-            user = validate_decode_token(token)
+            token = Authorization.get_auth_token(request.headers)
+            user = Authorization.validate_decode_token(token)
             return logout(user, token), 200
         else:
             raise BadRequest("\'{}\' is not a valid action.".format(action))
