@@ -30,7 +30,7 @@ class MessagesModel(object):
 
     @staticmethod
     def create_message(creator_id, message_body, topic_id, parent_id=None):
-        if not TopicsModel.topic_exists(topic_id):
+        if not TopicsModel.topic_exists_by_id(topic_id):
             raise BadRequest("Topic does not exist, id={}".format(topic_id))
 
         if not UsersModel.user_exists(creator_id):
@@ -59,7 +59,22 @@ class MessagesModel(object):
 
     @staticmethod
     def list_messages():
-        print(str(redis.zrevrange("messages", 0, 49, withscores=True)), file=sys.stderr)
-
-        return redis.zrevrange("messages", 0, 49)
+        message_list = []
+        message_array = redis.zrevrange("messages", 0, 49)
+        print(message_array, file=sys.stderr)
+        for message_id in message_array:
+            message = {}
+            message_details = redis.hgetall("message-{}".format(message_id))
+            print(message_details, file=sys.stderr)
+            message['id'] = message_details['message_id']
+            message['topic_id'] = message_details['topic_id']
+            message['creator_id'] = message_details['creator_id']
+            if 'parent_id' in message_details:
+                message['parent_id'] = message_details['parent_id']
+            message['message_body'] = redis.get(message_id)
+            message_list.append(message)
+        
+        print(message_list, file=sys.stderr)
+        return message_list
+            
 

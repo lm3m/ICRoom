@@ -26,6 +26,13 @@ class TopicsModel(object):
         return False
 
     @staticmethod
+    def topic_exists_by_id(topic_id):
+        topic_title = redis.hget(topic_id, 'title')
+        if topic_title is not None:
+            return True
+        return False
+
+    @staticmethod
     def create_topic(title, description):
         """
         creates a new topic, validating that the topic title is unique
@@ -60,6 +67,7 @@ class TopicsModel(object):
         """
         topic_list = []
         topic_array = redis.zrevrange("topics", 0, 49)
+        print(topic_array, file=sys.stderr)
         for topic_id in topic_array:
             topic = {}
             topic_details = redis.hgetall(topic_id)
