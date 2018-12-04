@@ -41,7 +41,7 @@ class TopicsModel(object):
 
     @staticmethod
     def update_topic_activity(topic_id, timestamp):
-        redis.zadd("topics", {topic_id: topic_time.timestamp()})
+        redis.zadd("topics", {topic_id: timestamp})
 
     @staticmethod
     def create_topic(title, description):
