@@ -16,15 +16,15 @@ class MessagesController(Resource):
     @prefix.doc('Create a new message')
     @prefix.expect(messages_model, validate=True)
     @requires_authorization
-    def post(self):
+    def post(self, user):
         """
         creates a new message
         """
-        return MessagesModel.create_message(api.payload['username'], api.payload['password']), 200
+        return MessagesModel.create_message(user, api.payload['message_body'], api.payload['topic_id'], api.payload['parent_id']), 200
 
     @prefix.doc('List messages')
     @requires_authorization
-    def get(self):
+    def get(self, user):
         """
         returns the first 50 messages
         :return:

@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 # model for user creation
 messages_model = api.model('Topic', {
-    'messageBody': fields.String(required=True, description='Message Body'),
+    'message_body': fields.String(required=True, description='Message Body'),
     'topic_id': fields.String(required=True, description='Parent Topic, cannot be null'),
     'creator_id': fields.String(required=True, description='Creator User Id'),
     'parent_id': fields.String(required=False, description='Parent Message, can be null.')
