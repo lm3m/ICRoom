@@ -1,3 +1,4 @@
+import sys
 import logging
 
 from flask import request, make_response, jsonify
@@ -16,7 +17,7 @@ class MessagesController(Resource):
     @prefix.doc('Create a new message')
     @prefix.expect(messages_model, validate=True)
     @requires_authorization
-    def post(self, user):
+    def post(user, self):
         """
         creates a new message
         """

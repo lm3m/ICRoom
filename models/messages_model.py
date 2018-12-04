@@ -1,3 +1,4 @@
+import sys
 import logging
 import uuid
 
@@ -28,11 +29,10 @@ class MessagesModel(object):
         return False
 
     @staticmethod
-    def create_message(user, message_body, topic_id, parent_id=None):
+    def create_message(creator_id, message_body, topic_id, parent_id=None):
         if not TopicsModel.topic_exists(topic_id):
             raise BadRequest("Topic does not exist, id={}".format(topic_id))
 
-        creator_id = UsersModel.build_user_id(user)
         if not UsersModel.user_exists(creator_id):
             raise BadRequest("User does not exist, id={}".format(creator_id))
 
@@ -40,22 +40,26 @@ class MessagesModel(object):
             raise BadRequest("Parent message does not exist, id={}".format(parent_id))
 
         message_time = datetime.utcnow()
-        message_id = uuid.uuid4()
+        message_id = str(uuid.uuid4())
         message_dict = {
             "creator_id": creator_id,
-            "parent_id": parent_id,
             "topic_id": topic_id,
             "message_id": message_id,
-            "creation_datetime_utc": message_time
+            "creation_datetime_utc": str(message_time)
         }
+
+        if parent_id is not None:
+            message_dict['parent_id'] = parent_id
 
         redis.set(message_id, message_body)
         redis.hmset("message-{}".format(message_id), message_dict)
-        redis.zadd("messages", message_time.timestamp(), message_id)
+        redis.zadd("messages", {message_id: message_time.strftime("%s")})
 
         return message_id
 
     @staticmethod
     def list_messages():
-        redis.zrange("messages", 0, 49)
+        print(str(redis.zrevrange("messages", 0, 49, withscores=True)), file=sys.stderr)
+
+        return redis.zrevrange("messages", 0, 49)
 
