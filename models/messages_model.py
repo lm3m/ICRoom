@@ -15,7 +15,6 @@ log = logging.getLogger(__name__)
 messages_model = api.model('Topic', {
     'message_body': fields.String(required=True, description='Message Body'),
     'topic_id': fields.String(required=True, description='Parent Topic, cannot be null'),
-    'creator_id': fields.String(required=True, description='Creator User Id'),
     'parent_id': fields.String(required=False, description='Parent Message, can be null.')
 })
 

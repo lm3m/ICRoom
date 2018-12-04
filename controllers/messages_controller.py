@@ -20,7 +20,12 @@ class MessagesController(Resource):
         """
         creates a new message
         """
-        return MessagesModel.create_message(user, api.payload['message_body'], api.payload['topic_id'], api.payload['parent_id']), 200
+        message_body = api.payload['message_body']
+        topic_id = api.payload['topic_id']
+        parent_id = None
+        if 'parent_id' in api.payload:
+            parent_id = api.payload['parent_id']
+        return MessagesModel.create_message(user, message_body, topic_id, parent_id), 200
 
     @prefix.doc('List messages')
     @requires_authorization
