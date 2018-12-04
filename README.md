@@ -17,9 +17,10 @@ once the app is up and running the routes are up at:
 <host>:4000/api
 the swagger which goes over the details of the API are at:
 http://<host>:4000/api/
-
-**API Details
-user creation:
+But, they are also list here.
+	
+##  API Details
+### user creation:
 	POST /api/users/ 
 	with a body of:
 	{
@@ -27,17 +28,17 @@ user creation:
 		"password": "test"
 	}
 
-user login:
+### user login:
 	PATCH /api/users/test?action=login 
 	{
 		"password": "test"
 	}
-returns:
+	returns:
 	{
 		"auth_token": "<token>"
 	}
 
-topic creation:
+### topic creation:
 	POST /api/topics/ 
 	header:
 		authorization: Bearer <auth_token>
@@ -46,23 +47,23 @@ topic creation:
  		"title": "unique title",
   		"description": "topic description"
 	}
-returns:
-	topic_id
+	returns:
+		topic_id
 
-topic list:
+### topic list:
 	GET /api/topics/
 	header:
 		authorization: Bearer <auth_token>
-returns
-[
-	{
-		"id": "topic_id",
-		"title": "title",
-		"description": "description"
-	}, ...
-]
+	returns:
+		[
+			{
+				"id": "topic_id",
+				"title": "title",
+				"description": "description"
+			}, ...
+		]
 
-message creation:
+### message creation:
 	POST /api/messages/
 	{
  		"message_body": "Message",
@@ -71,20 +72,20 @@ message creation:
 	}
 	header:
 		authorization: Bearer <auth_token>
-returns:
-	message_id
+	returns:
+		message_id
 
-message list:
+### message list:
 	GET /api/messages/ HTTP/1.1
 	header:
 		authorization: Bearer <auth_token>
-returns
-[
-	{
-		"id": "message_id",
-		"topic_id": "topic_id",
-		"creator_id": "user_id",
-		"message_body": "message",
-		{"parent_id" : "optional parent_id"}
-	},
-]
+	returns:
+		[
+			{
+				"id": "message_id",
+				"topic_id": "topic_id",
+				"creator_id": "user_id",
+				"message_body": "message",
+				{"parent_id" : "optional parent_id"}
+			},
+		]
