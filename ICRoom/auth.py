@@ -5,9 +5,9 @@ import sys
 
 from flask import request
 from functools import wraps
-from database import redis
+from ICRoom.database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
-from config import config
+from ICRoom.config import config
 
 
 def requires_authorization(f):

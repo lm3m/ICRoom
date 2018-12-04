@@ -2,10 +2,10 @@ import logging
 
 from flask import request, make_response, jsonify
 from flask_restplus import Resource, fields
-from rest_plus import api
-from models.users_model import UsersModel, users_model
+from ICRoom.api import api
+from ICRoom.models.users_model import UsersModel, users_model
 from werkzeug.exceptions import HTTPException, BadRequest
-from auth import Authorization
+from ICRoom.auth import Authorization
 
 log = logging.getLogger(__name__)
 

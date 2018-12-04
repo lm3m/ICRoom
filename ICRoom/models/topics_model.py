@@ -4,8 +4,8 @@ import uuid
 
 from datetime import datetime
 from flask_restplus import fields
-from rest_plus import api
-from database import redis
+from ICRoom.api import api
+from ICRoom.database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
 
 log = logging.getLogger(__name__)
@@ -61,7 +61,8 @@ class TopicsModel(object):
         }
 
         redis.hmset(topic_id, topic_dict)
-        redis.zadd("topics", {topic_id: topic_time.strftime("%s")})
+        print({topic_id: topic_time.timestamp()}, file=sys.stderr)
+        redis.zadd("topics", {topic_id: topic_time.timestamp()})
         print(redis.hgetall(topic_id), file=sys.stderr)
         return topic_id
 

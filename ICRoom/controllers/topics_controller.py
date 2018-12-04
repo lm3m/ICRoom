@@ -2,9 +2,9 @@ import logging
 
 from flask import request, make_response, jsonify
 from flask_restplus import Resource, fields
-from rest_plus import api
-from models.topics_model import TopicsModel, topics_model
-from auth import requires_authorization
+from ICRoom.api import api
+from ICRoom.models.topics_model import TopicsModel, topics_model
+from ICRoom.auth import requires_authorization
 
 log = logging.getLogger(__name__)
 
