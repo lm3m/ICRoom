@@ -2,11 +2,11 @@ from flask import Flask, Blueprint
 from redis import RedisError
 import os
 import socket
-from ICRoom.api import api
-from ICRoom.controllers.user_controller import prefix as users_namespace
-from ICRoom.controllers.topics_controller import prefix as topics_namespace
-from ICRoom.controllers.messages_controller import prefix as messages_namespace
-from ICRoom.database import redis
+from api import api
+from controllers.user_controller import prefix as users_namespace
+from controllers.topics_controller import prefix as topics_namespace
+from controllers.messages_controller import prefix as messages_namespace
+from database import redis
 
 app = Flask(__name__)
 

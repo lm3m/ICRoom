@@ -2,10 +2,10 @@ import sys
 import logging
 
 from flask_restplus import fields
-from ICRoom.api import api
-from ICRoom.database import redis
+from api import api
+from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
-from ICRoom.auth import Authorization
+from auth import Authorization
 
 log = logging.getLogger(__name__)
 

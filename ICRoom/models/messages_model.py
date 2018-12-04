@@ -3,11 +3,11 @@ import logging
 import uuid
 
 from flask_restplus import fields
-from ICRoom.api import api
-from ICRoom.database import redis
+from api import api
+from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
-from ICRoom.models.topics_model import TopicsModel
-from ICRoom.models.users_model import UsersModel
+from models.topics_model import TopicsModel
+from models.users_model import UsersModel
 from datetime import datetime
 
 log = logging.getLogger(__name__)

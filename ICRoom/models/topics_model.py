@@ -4,8 +4,8 @@ import uuid
 
 from datetime import datetime
 from flask_restplus import fields
-from ICRoom.api import api
-from ICRoom.database import redis
+from api import api
+from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
 
 log = logging.getLogger(__name__)
