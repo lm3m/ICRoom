@@ -7,6 +7,7 @@ from flask_restplus import fields
 from api import api
 from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
+from logs import log_debug
 
 log = logging.getLogger(__name__)
 
@@ -61,9 +62,9 @@ class TopicsModel(object):
         }
 
         redis.hmset(topic_id, topic_dict)
-        print({topic_id: topic_time.timestamp()}, file=sys.stderr)
+        log_debug(log,{topic_id: topic_time.timestamp()})
         redis.zadd("topics", {topic_id: topic_time.timestamp()})
-        print(redis.hgetall(topic_id), file=sys.stderr)
+        log_debug(log, redis.hgetall(topic_id))
         return topic_id
 
     @staticmethod
@@ -74,17 +75,17 @@ class TopicsModel(object):
         """
         topic_list = []
         topic_array = redis.zrevrange("topics", 0, 49)
-        print(topic_array, file=sys.stderr)
+        log_debug(log, topic_array)
         for topic_id in topic_array:
             topic = {}
             topic_details = redis.hgetall(topic_id)
-            print(topic_details, file=sys.stderr)
+            log_debug(log, topic_details)
             topic["id"] = topic_details['topic_id']
             topic["title"] = topic_details['title']
             topic["description"] = topic_details['description']
             topic_list.append(topic)
 
-        print(topic_list, file=sys.stderr)
+        log_debug(log, topic_list)
         return topic_list
 
 

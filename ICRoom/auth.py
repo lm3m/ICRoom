@@ -9,7 +9,6 @@ from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
 from config import config
 
-
 def requires_authorization(f):
     """
     decorator for token validation for routes
@@ -35,9 +34,9 @@ class Authorization(object):
             raise Unauthorized("Authorization header required")
         
         data = headers['Authorization']
-        print(str(data), file=sys.stderr)
+        log_debug(log, str(data))
         token = str.replace(str(data), 'Bearer ','')
-        print(str(token), file=sys.stderr)
+        log_debug(log, str(token))
         return token
 
     @staticmethod
@@ -50,7 +49,7 @@ class Authorization(object):
         try:
             if Authorization.check_blocklist(token):
                 raise Unauthorized("Authorization header revoked")
-            print(str(token), file=sys.stderr)
+            log_debug(log, str(token))
             payload = jwt.decode(token,
                                  config['DEFAULT']['SECRET_KEY'],
                                  algorithms=['HS256'])
@@ -58,7 +57,7 @@ class Authorization(object):
 
             return user
         except Exception as ex:
-            print(str(ex), file=sys.stderr)
+            log_debug(log, str(ex))
             raise Unauthorized("Authorization header invalid")
 
     @staticmethod
@@ -95,14 +94,14 @@ class Authorization(object):
                 'sub': user_id
             }
         
-            print(str(payload), file=sys.stderr)
+            log_debug(log, str(payload))
             token = jwt.encode(
                 payload,
                 config['DEFAULT']['SECRET_KEY']).decode('utf-8')
-            print(str(token), file=sys.stderr)
+            log_debug(log, str(token))
             return token
         except Exception as e:
-            print(str(e), file=sys.stderr)
+            log_debug(log, str(e))
             raise e
 
     @staticmethod

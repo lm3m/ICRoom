@@ -6,6 +6,7 @@ from api import api
 from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
 from auth import Authorization
+from logs import log_debug
 
 log = logging.getLogger(__name__)
 
@@ -40,12 +41,12 @@ class UsersModel(object):
         create a new user, making sure it username is unique
         """
         user_id = UsersModel.build_user_id(username)
-        print(user_id, file=sys.stderr)
+        log_debug(log, user_id)
 
         if UsersModel.user_exists(user_id):
             raise BadRequest("User already exists")
         
-        print("New User: {}".format(username), file=sys.stderr)
+        log_debug(log, "New User: {}".format(username))
         hashed = Authorization.hash_password(password)
         user_dict = {
             'user' : username,
@@ -53,7 +54,7 @@ class UsersModel(object):
         }
 
         redis.hmset(user_id, user_dict)
-        print(redis.hgetall(user_id), file=sys.stderr)
+        log_debug(log, redis.hgetall(user_id))
         return user_id
 
     @staticmethod

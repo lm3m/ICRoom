@@ -6,6 +6,7 @@ from flask_restplus import Resource, fields
 from api import api
 from models.messages_model import MessagesModel, messages_model
 from auth import requires_authorization
+from logs import log_debug
 
 log = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ class MessagesController(Resource):
         """
         creates a new message
         """
-        print(user, file=sys.stderr)
+        log_debug(log, user)
         message_body = api.payload['message_body']
         topic_id = api.payload['topic_id']
         parent_id = None

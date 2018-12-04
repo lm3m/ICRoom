@@ -1,4 +1,3 @@
-import sys
 import logging
 import uuid
 
@@ -9,6 +8,7 @@ from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unaut
 from models.topics_model import TopicsModel
 from models.users_model import UsersModel
 from datetime import datetime
+from logs import log_debug
 
 log = logging.getLogger(__name__)
 
@@ -70,11 +70,11 @@ class MessagesModel(object):
         """
         message_list = []
         message_array = redis.zrevrange("messages", 0, 49)
-        print(message_array, file=sys.stderr)
+        log_debug(message_array)
         for message_id in message_array:
             message = {}
             message_details = redis.hgetall("message-{}".format(message_id))
-            print(message_details, file=sys.stderr)
+            log_debug(message_details)
             message['id'] = message_details['message_id']
             message['topic_id'] = message_details['topic_id']
             message['creator_id'] = message_details['creator_id']
@@ -83,7 +83,7 @@ class MessagesModel(object):
             message['message_body'] = redis.get(message_id)
             message_list.append(message)
         
-        print(message_list, file=sys.stderr)
+        log_debug(message_list)
         return message_list
             
 
