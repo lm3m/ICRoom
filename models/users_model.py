@@ -15,7 +15,14 @@ users_model = api.model('User', {
     'password': fields.String(required=True, description='Password')
 })
 
+
 class UsersModel(object):
+    @staticmethod
+    def user_exists(user_id):
+        user = redis.hget(user_id, "user")
+        if user is not None:
+            return True
+        return False
 
     @staticmethod
     def build_user_id(username):
@@ -32,8 +39,7 @@ class UsersModel(object):
         user_id = UsersModel.build_user_id(username)
         print(user_id, file=sys.stderr)
 
-        user = redis.hget(user_id, "user")
-        if user is not None:
+        if UsersModel.user_exists(user_id):
             raise BadRequest("User already exists")
         
         print("New User: {}".format(username), file=sys.stderr)

@@ -11,6 +11,7 @@ log = logging.getLogger(__name__)
 
 prefix = api.namespace('users', description='Controller for Users')
 
+
 @prefix.route('/')
 class UsersController(Resource):
     @prefix.doc('Create a new user')
@@ -20,7 +21,8 @@ class UsersController(Resource):
         creates a new user
         """
         return UsersModel.create_user(api.payload['username'], api.payload['password']), 200
-    
+
+
 @prefix.route('/<username>')
 @prefix.param('username', 'user to act upon')
 class UserController(Resource):

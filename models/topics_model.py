@@ -14,10 +14,18 @@ topics_model = api.model('Topic', {
     'description': fields.String(required=True, description='Topic Description')
 })
 
+
 class TopicsModel(object):
     @staticmethod
     def build_topic_name(title):
         return "topic-{}".format(title)
+
+    @staticmethod
+    def topic_exists(topic_id):
+        topic_title = redis.hget(topic_id, "title")
+        if topic_title is not None:
+            return True
+        return False
 
     @staticmethod
     def create_topic(title, description):
@@ -31,7 +39,7 @@ class TopicsModel(object):
         print(topic_label, file=sys.stderr)
 
         topic_title = redis.hget(topic_label, "title")
-        if topic_title is not None:
+        if TopicsModel.topic_exists(topic_label):
             raise BadRequest("Topic already exists")
 
         topic_id = redis.rpush("topic-list", topic_label)
