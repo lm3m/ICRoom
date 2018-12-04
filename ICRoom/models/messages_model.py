@@ -61,6 +61,9 @@ class MessagesModel(object):
         redis.hmset("message-{}".format(message_id), message_dict)
         redis.zadd("messages", {message_id: message_time.timestamp()})
 
+        # update the topic activity
+        TopicsModel.update_topic_activity(topic_id, message_time.timestamp())
+
         return message_id
 
     @staticmethod

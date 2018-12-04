@@ -40,6 +40,10 @@ class TopicsModel(object):
         return False
 
     @staticmethod
+    def update_topic_activity(topic_id, timestamp):
+        redis.zadd("topics", {topic_id: topic_time.timestamp()})
+
+    @staticmethod
     def create_topic(title, description):
         """
         creates a new topic, validating that the topic title is unique
@@ -63,7 +67,7 @@ class TopicsModel(object):
 
         redis.hmset(topic_id, topic_dict)
         log_debug(log,{topic_id: topic_time.timestamp()})
-        redis.zadd("topics", {topic_id: topic_time.timestamp()})
+        TopicsModel.update_topic_activity(topic_id, topic_time.timestamp())
         log_debug(log, redis.hgetall(topic_id))
         return topic_id
 
