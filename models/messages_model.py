@@ -23,6 +23,9 @@ messages_model = api.model('Topic', {
 class MessagesModel(object):
     @staticmethod
     def message_exists(message_id):
+        """
+        checks to see if a message exists for a given id
+        """
         message = redis.get(message_id)
         if message is not None:
             return True
@@ -30,6 +33,9 @@ class MessagesModel(object):
 
     @staticmethod
     def create_message(creator_id, message_body, topic_id, parent_id=None):
+        """
+        validates the input and then creates a message
+        """
         if not TopicsModel.topic_exists_by_id(topic_id):
             raise BadRequest("Topic does not exist, id={}".format(topic_id))
 
@@ -59,6 +65,9 @@ class MessagesModel(object):
 
     @staticmethod
     def list_messages():
+        """
+        returns the most recent 50 messages created
+        """
         message_list = []
         message_array = redis.zrevrange("messages", 0, 49)
         print(message_array, file=sys.stderr)

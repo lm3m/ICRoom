@@ -19,6 +19,9 @@ users_model = api.model('User', {
 class UsersModel(object):
     @staticmethod
     def user_exists(user_id):
+        """
+        checks if a given user exists for a given user id
+        """
         user = redis.hget(user_id, "user")
         if user is not None:
             return True
