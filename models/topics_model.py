@@ -1,6 +1,8 @@
 import sys
 import logging
+import uuid
 
+from datetime import datetime
 from flask_restplus import fields
 from rest_plus import api
 from database import redis
@@ -17,13 +19,9 @@ topics_model = api.model('Topic', {
 
 class TopicsModel(object):
     @staticmethod
-    def build_topic_name(title):
-        return "topic-{}".format(title)
-
-    @staticmethod
-    def topic_exists(topic_id):
-        topic_title = redis.hget(topic_id, "title")
-        if topic_title is not None:
+    def topic_exists(topic_title):
+        topic_id = redis.get(topic_title)
+        if topic_id is not None:
             return True
         return False
 
@@ -35,22 +33,23 @@ class TopicsModel(object):
         :param description:
         :return topic id:
         """
-        topic_label = TopicsModel.build_topic_name(title)
-        print(topic_label, file=sys.stderr)
-
-        topic_title = redis.hget(topic_label, "title")
-        if TopicsModel.topic_exists(topic_label):
+        if TopicsModel.topic_exists(title):
             raise BadRequest("Topic already exists")
 
-        topic_id = redis.rpush("topic-list", topic_label)
+        topic_time = datetime.utcnow()
+        topic_id = str(uuid.uuid4())
+        redis.set(title, topic_id)
 
         topic_dict = {
             'title': title,
-            'description': description
+            'description': description,
+            'topic_id': topic_id,
+            'creation_datetime_utc': str(title_time)
         }
 
-        redis.hmset(topic_label, topic_dict)
-        print(redis.hgetall(topic_label), file=sys.stderr)
+        redis.hmset(topic_id, topic_dict)
+        redis.zadd("topics", {topic_id: topic_time.strftime("%s")})
+        print(redis.hgetall(topic_id), file=sys.stderr)
         return topic_id
 
     @staticmethod
@@ -60,12 +59,12 @@ class TopicsModel(object):
         :return all topics:
         """
         topic_list = []
-        topic_array = redis.lrange("topic-list", 0, -1)
-        for index, topic_label in enumerate(topic_array):
+        topic_array = redis.zrevrange("topics", 0, 49)
+        for topic_id in topic_array:
             topic = {}
-            topic_details = redis.hgetall(topic_label)
+            topic_details = redis.hgetall(topic_id)
             print(topic_details, file=sys.stderr)
-            topic["id"] = index
+            topic["id"] = topic_details['topic_id']
             topic["title"] = topic_details['title']
             topic["description"] = topic_details['description']
             topic_list.append(topic)
