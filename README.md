@@ -37,7 +37,14 @@ But, they are also list here.
 	{
 		"auth_token": "<token>"
 	}
-
+	
+### user logout:
+	PATCH /api/users/test?action=login 
+	header:
+		authorization: Bearer <auth_token>
+	returns:
+		true
+		
 ### topic creation:
 	POST /api/topics/ 
 	header:
