@@ -20,6 +20,7 @@ class MessagesController(Resource):
         """
         creates a new message
         """
+        print(user, file=sys.stderr)
         message_body = api.payload['message_body']
         topic_id = api.payload['topic_id']
         parent_id = None
