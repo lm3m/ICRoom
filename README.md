@@ -6,6 +6,8 @@ Currently the docker-compose.yml uses a tag called: lm3m/icroom.0
 
 The deploy.sh script is the one used during development, which should setup the app and a redis instance to go with it, along with the networking and volumes it would need.
 
+you could also run `python ICRoom/app.py`, but it expects redis to be running already.
+
 General layout of the code:
 toplevel - requirements, docker files, etc.
 ICRoom - main app, and helpers (including the swagger infrastructure)
@@ -16,8 +18,8 @@ todo.md - list of things I would fix next
 once the app is up and running the routes are up at:
 <host>:4000/api
 the swagger which goes over the details of the API are at:
-http://<host>:4000/api/
-But, they are also list here.
+http://<host>:4000/api/ 
+	or summerized below:
 	
 ##  API Details
 ### user creation:
