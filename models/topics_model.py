@@ -44,7 +44,7 @@ class TopicsModel(object):
             'title': title,
             'description': description,
             'topic_id': topic_id,
-            'creation_datetime_utc': str(title_time)
+            'creation_datetime_utc': str(topic_time)
         }
 
         redis.hmset(topic_id, topic_dict)
