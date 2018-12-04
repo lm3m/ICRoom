@@ -2,12 +2,16 @@ import bcrypt
 import jwt
 import datetime
 import sys
+import logging
 
 from flask import request
 from functools import wraps
 from database import redis
 from werkzeug.exceptions import HTTPException, BadRequest, NotImplemented, Unauthorized
 from config import config
+from logs import log_debug
+
+log = logging.getLogger(__name__)
 
 def requires_authorization(f):
     """

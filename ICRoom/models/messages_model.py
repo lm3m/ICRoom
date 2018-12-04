@@ -70,11 +70,11 @@ class MessagesModel(object):
         """
         message_list = []
         message_array = redis.zrevrange("messages", 0, 49)
-        log_debug(message_array)
+        log_debug(log, message_array)
         for message_id in message_array:
             message = {}
             message_details = redis.hgetall("message-{}".format(message_id))
-            log_debug(message_details)
+            log_debug(log, message_details)
             message['id'] = message_details['message_id']
             message['topic_id'] = message_details['topic_id']
             message['creator_id'] = message_details['creator_id']
@@ -83,7 +83,7 @@ class MessagesModel(object):
             message['message_body'] = redis.get(message_id)
             message_list.append(message)
         
-        log_debug(message_list)
+        log_debug(log, message_list)
         return message_list
             
 

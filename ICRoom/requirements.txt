@@ -1,0 +1,6 @@
+flask
+redis
+flask-restplus
+py-bcrypt
+PyJWT
+
