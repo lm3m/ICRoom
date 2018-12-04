@@ -59,7 +59,7 @@ class MessagesModel(object):
 
         redis.set(message_id, message_body)
         redis.hmset("message-{}".format(message_id), message_dict)
-        redis.zadd("messages", {message_id: message_time.strftime("%s")})
+        redis.zadd("messages", {message_id: message_time.timestamp()})
 
         return message_id
 

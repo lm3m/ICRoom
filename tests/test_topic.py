@@ -7,7 +7,7 @@ import models.topics_model
 
 models.topics_model.redis = fixed_fake_redis
 
-class test_create_user(unittest.TestCase):
+class test_create_topic(unittest.TestCase):
     def test_simple_create(self):
         self.assertIsNotNone(models.topics_model.TopicsModel.create_topic("title", "fake topic"))
         self.assertIsNotNone(models.topics_model.TopicsModel.list_topics())
