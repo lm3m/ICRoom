@@ -20,6 +20,9 @@ topics_model = api.model('Topic', {
 class TopicsModel(object):
     @staticmethod
     def topic_exists(topic_title):
+        """
+        checks to see if a topic exists for a given title
+        """
         topic_id = redis.get(topic_title)
         if topic_id is not None:
             return True
@@ -27,6 +30,9 @@ class TopicsModel(object):
 
     @staticmethod
     def topic_exists_by_id(topic_id):
+        """
+        checks to see if a topic exists for a given id
+        """
         topic_title = redis.hget(topic_id, 'title')
         if topic_title is not None:
             return True
@@ -62,8 +68,8 @@ class TopicsModel(object):
     @staticmethod
     def list_topics():
         """
-        gets the list of all topics
-        :return all topics:
+        gets the list of the 50 most recent topics
+        :return top 50 topics:
         """
         topic_list = []
         topic_array = redis.zrevrange("topics", 0, 49)
