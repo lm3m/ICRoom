@@ -27,7 +27,7 @@ def main():
     api.init_app(blueprint)
     api.add_namespace(users_namespace)
     api.add_namespace(topics_namespace)
-    api.add_namespace(messages_namspace)
+    api.add_namespace(messages_namespace)
     app.register_blueprint(blueprint)
     app.run(host='0.0.0.0', port=80)
 
